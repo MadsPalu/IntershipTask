@@ -1,0 +1,103 @@
+[
+  {
+    "ContainingType": "GrantNavigator.Controllers.CompanyController",
+    "Method": "GetCompany",
+    "RelativePath": "api/Company/{cvrNumber}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cvrNumber",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GrantNavigator.Controllers.CompanyController",
+    "Method": "LookupAndSaveCompany",
+    "RelativePath": "api/Company/lookup/{cvrNumber}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cvrNumber",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GrantNavigator.Controllers.GrantController",
+    "Method": "GetMatchedGrants",
+    "RelativePath": "api/Grant/matched/{cvrNumber}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cvrNumber",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GrantNavigator.Controllers.SavedGrantsController",
+    "Method": "GetSavedGrants",
+    "RelativePath": "api/SavedGrants/{cvrNumber}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cvrNumber",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GrantNavigator.Controllers.SavedGrantsController",
+    "Method": "SaveGrant",
+    "RelativePath": "api/SavedGrants/save",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "GrantNavigator.Controllers.SaveGrantDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GrantNavigator.Controllers.SavedGrantsController",
+    "Method": "UnsaveGrant",
+    "RelativePath": "api/SavedGrants/unsave/{cvrNumber}/{grantId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cvrNumber",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "grantId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
