@@ -3,6 +3,29 @@ import {
   useSaveGrantMutation 
 } from '../store';
 
+// Hjælpefunktion til at forklare match-logikken pædagogisk
+const getMatchDetails = (score) => {
+  if (score >= 100) {
+    return {
+      label: 'Direkte Match',
+      badgeClass: 'bg-success',
+      description: 'Matcher din virksomheds specifikke DB07-branchekode 100%'
+    };
+  }
+  if (score >= 85) {
+    return {
+      label: 'Relateret Match',
+      badgeClass: 'bg-primary',
+      description: 'Matcher din overordnede brancesektor'
+    };
+  }
+  return {
+    label: 'Generel Støtte',
+    badgeClass: 'bg-secondary',
+    description: 'Bred støtteordning åben for flere erhvervsbrancher'
+  };
+};
+
 export default function MatchedGrantsList({ company }) {
   const { data: matches, isFetching, error } = useFetchMatchedGrantsQuery(
     company?.cvrNumber, 
@@ -49,36 +72,66 @@ export default function MatchedGrantsList({ company }) {
 
       <div className="row g-3">
         {matches?.map((m, index) => {
-          // Håndterer om objektet indeholder m.grant eller om egenskaberne ligger direkte på m
           const grant = m.grant || m;
           const grantId = grant.id || m.grantId;
+          const matchInfo = getMatchDetails(m.matchScore ?? 0);
+
+          const grantUrl = 
+            grant.directLink || 
+            grant.DirectLink || 
+            grant.url || 
+            grant.link;
 
           return (
             <div key={grantId || index} className="col-md-6">
               <div className="card h-100 shadow-sm border-start border-4 border-primary">
-                <div className="card-body">
-                  <div className="d-flex justify-content-between align-items-start mb-2">
-                    <h4 className="h6 card-title fw-bold mb-0">
-                      {grant.title || 'Uden titel'}
-                    </h4>
-                    <span className={`badge ${m.matchScore === 100 ? 'bg-success' : 'bg-primary'}`}>
-                      {m.matchScore ?? 0}% Match
-                    </span>
+                <div className="card-body d-flex flex-column justify-content-between">
+                  <div>
+                    <div className="d-flex justify-content-between align-items-start mb-2">
+                      <h4 className="h6 card-title fw-bold mb-0">
+                        {grant.title || 'Uden titel'}
+                      </h4>
+                      <span className={`badge ${matchInfo.badgeClass}`}>
+                        {matchInfo.label}
+                      </span>
+                    </div>
+                    
+                    <p className="small text-muted mb-2">Udbyder: {grant.provider || 'Ukendt'}</p>
+
+                    {/* Tydelig forklaring på match-grundlaget */}
+                    <div className="bg-light p-2 rounded mb-3 border-start border-3 border-info">
+                      <p className="mb-0 text-dark" style={{ fontSize: '0.8rem' }}>
+                        💡 <strong>Match-grundlag:</strong> {matchInfo.description}
+                      </p>
+                    </div>
+
+                    <p className="card-text small">{grant.description || ''}</p>
                   </div>
-                  <p className="small text-muted mb-2">Udbyder: {grant.provider || 'Ukendt'}</p>
-                  <p className="card-text small">{grant.description || ''}</p>
                   
-                  <div className="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
-                    <span className="fw-bold text-success">
+                  <div className="mt-3 pt-2 border-top">
+                    <div className="fw-bold text-success mb-2">
                       {grant.maxAmount ? `Op til ${grant.maxAmount.toLocaleString('da-DK')} DKK` : 'Variabelt beløb'}
-                    </span>
-                    <button 
-                      onClick={() => handleSave(grantId)} 
-                      className="btn btn-sm btn-outline-primary"
-                      disabled={isSaving || !grantId}
-                    >
-                      Gem Fond
-                    </button>
+                    </div>
+                    
+                    <div className="d-flex gap-2">
+                      {grantUrl && (
+                        <a 
+                          href={grantUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="btn btn-sm btn-outline-secondary flex-grow-1 text-center"
+                        >
+                          Gå til fond ↗
+                        </a>
+                      )}
+                      <button 
+                        onClick={() => handleSave(grantId)} 
+                        className="btn btn-sm btn-primary flex-grow-1"
+                        disabled={isSaving || !grantId}
+                      >
+                        Gem Fond
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
